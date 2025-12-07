@@ -3,6 +3,8 @@ package rpc
 import (
 	"encoding/json"
 	"lfts/internal/chain"
+	"lfts/internal/contracts"
+	"lfts/internal/fdc"
 	"lfts/internal/ftso"
 	"net/http"
 	"strconv"
@@ -60,6 +62,32 @@ func HandleFTSOPrice(w http.ResponseWriter, r *http.Request) {
 	ftso.HandlePrice(w, r)
 }
 
+// HandleFTSOPriceHistory delegates to ftso package handler
+func HandleFTSOPriceHistory(w http.ResponseWriter, r *http.Request) {
+	ftso.HandlePriceHistory(w, r)
+}
+
+// HandleFTSOAllPrices handles GET /ftso/prices - returns all FTSO prices
+func HandleFTSOAllPrices(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	prices, err := ftso.GetAllPrices()
+	if err != nil {
+		http.Error(w, "Error retrieving prices", http.StatusInternalServerError)
+		return
+	}
+
+	response := map[string]interface{}{
+		"prices": prices,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
 // HandleInjectFTSO handles POST /ftso/inject?asset=<asset>&price=<price>
 func HandleInjectFTSO(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -90,5 +118,30 @@ func HandleInjectFTSO(w http.ResponseWriter, r *http.Request) {
 	priceObj, _ := ftso.GetPrice(asset)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(priceObj)
+}
+
+// HandleFDCFeed delegates to fdc package handler
+func HandleFDCFeed(w http.ResponseWriter, r *http.Request) {
+	fdc.HandleFeed(w, r)
+}
+
+// HandleFDCInject delegates to fdc package handler
+func HandleFDCInject(w http.ResponseWriter, r *http.Request) {
+	fdc.HandleInjectFeed(w, r)
+}
+
+// HandleFDCHistory delegates to fdc package handler
+func HandleFDCHistory(w http.ResponseWriter, r *http.Request) {
+	fdc.HandleFeedHistory(w, r)
+}
+
+// HandleFDCList delegates to fdc package handler
+func HandleFDCList(w http.ResponseWriter, r *http.Request) {
+	fdc.HandleListFeeds(w, r)
+}
+
+// HandleJSONRPC delegates to contracts package handler
+func HandleJSONRPC(w http.ResponseWriter, r *http.Request) {
+	contracts.HandleJSONRPC(w, r)
 }
 

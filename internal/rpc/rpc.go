@@ -18,7 +18,14 @@ func NewServer(port string) *Server {
 	mux.HandleFunc("/status", HandleStatus)
 	mux.HandleFunc("/block/latest", HandleLatestBlock)
 	mux.HandleFunc("/ftso/price", HandleFTSOPrice)
+	mux.HandleFunc("/ftso/prices", HandleFTSOAllPrices)
+	mux.HandleFunc("/ftso/history", HandleFTSOPriceHistory)
 	mux.HandleFunc("/ftso/inject", HandleInjectFTSO)
+	mux.HandleFunc("/fdc/feed", HandleFDCFeed)
+	mux.HandleFunc("/fdc/inject", HandleFDCInject)
+	mux.HandleFunc("/fdc/history", HandleFDCHistory)
+	mux.HandleFunc("/fdc/list", HandleFDCList)
+	mux.HandleFunc("/rpc", HandleJSONRPC)
 
 	server := &http.Server{
 		Addr:    ":" + port,
