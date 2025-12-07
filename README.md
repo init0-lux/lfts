@@ -4,7 +4,25 @@ A lightweight, standalone Flare-like local blockchain simulator with FTSO (Flare
 
 ## Purpose
 
+Developers building for Flare face issues like:
+
+-> Hard to simulate FTSO price updates
+-> Full-node setup is slow, heavy, and not hackathon-friendly
+-> FDC data feeds require real attestation providers
+-> Testing oracle-based smart contracts is difficult without live data
+-> No simple CLI for injecting oracle prices
+
 LFTS provides a minimal local testnet environment for testing FTSO price feeds, FDC data feeds, and smart contract interactions without requiring a full Flare network setup. It's designed to be hackathon-friendly, simple to understand, and easy to extend.
+
+LFTS solves all of these in one tiny Go binary- 
+
+-> Local chain with 1-second blocks
+-> Mock FTSO module
+-> Easy CLI for manipulating prices
+-> FDC mock connector (JSON data feeds + history)
+-> REST API + JSON-RPC
+-> Simple REST RPC
+-> Docker support
 
 ## Features
 
